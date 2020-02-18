@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Title -->
+    <title>updog - {{ directory }}</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome-5.1/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+</head>
+
+<body>
+<div class="conn">
+
+    <!-- Header -->
+    <header id="header" class="d-flex align_item_center">
+        <div onclick="document.location='/'" class="logo_p">
+            <img src="{{ url_for('static', filename='images/updog.png') }}" alt="updog">
+        </div>
+
+        <div class="heading_title_p">
+            <h2>Directory: {{ directory }}</h2>
+        </div>
+    </header>
+
+    <!-- ----- Upload Form ----- -->
+    <div class="inputUploadP">
+        <form method="post" action="/upload" enctype="multipart/form-data" class="uploadForm">
+            <!-- -- Upload File -- -->
+            <div class="uploadFile_P">
+                <input type="file" name="file" id="file" class="uploadFile"
+                       data-multiple-caption="{count} files selected" multiple/>
+                <label for="file">
+                    <i class="fa fa-upload"></i>
+                    <span>Choose a file…</span>
+                </label>
+                <input type="hidden" name="path" value="{{ directory }}">
+            </div>
+            <!-- -- Upload Btn -- -->
+            <p class="uploadBtn_P">
+                <button type="submit" class="uploadBtn btn btn-primary">
+                    Upload
+                </button>
+            </p>
+        </form>
+    </div>
+
+    {% if is_subdirectory %}
+    <section class="backBtn_p">
+        <a href="/{{ back }}">
+            <i class="fas fa-level-up-alt"></i>
+            <span>Back</span>
+        </a>
+    </section>
+    {% endif %}
+
+    <!-- Table -->
+    <section class="table_p table-responsive">
+        <table id="tableData" class="table table-hover compact">
+            <thead>
+            <tr>
+                <th width="4%"><!--Type (Directory or File)--></th>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Last Modified</th>
+                <th></th> <!-- View file -->
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+            <tr>
+                <td> <!-- Icon -->
+                    {% if file.is_dir %}
+                    <button class="file_ic"><i class="far fa-folder"></i></button><!-- Directory icon -->
+                    {% else %}
+                    <button class="file_ic"><i class="far fa-file"></i></button><!-- File icon -->
+                    {% endif %}
+                </td>
+                <td> <!-- Name -->
+                    <a href="/{{ file.rel_path }}">{{ file.name }}{% if file.is_dir %}/{% endif %}</a>
+                </td>
+                <td data-order="{{ file.size_sort }}"> <!-- File size -->
+                    {{ file.size }}
+                </td>
+                <td data-order="{{ file.last_modified_sort }}"> <!-- File last modified -->
+                    {{ file.last_modified }}
+                </td>
+                <td> <!-- View file -->
+                    {% if not file.is_dir %}
+                    <a href="/{{ file.rel_path }}?view">View in browser</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <p>
+            updog v{{ version }}
+        </p>
+    </footer>
+
+</div> <!-- end class conn -->
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatable/datatables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

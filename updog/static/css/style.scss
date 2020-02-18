@@ -1,0 +1,358 @@
+@import "font";
+// -------- Variables ----------
+$fontLight: 300;
+$fontBold: 600;
+$desktop: 1024px;
+$tablet: 768px;
+$mobile: 576px;
+$primary-color: #005dff;
+$secondary-color: #fff6bb;
+$light-color: #ffffff;
+$dark-color: #555555;
+$alt-bg-color: #f9f9f9;
+$slider-bg-color: #ccc;
+$tableHoverColor: #f9f9f9;
+
+
+// --------Mixins ------------
+@mixin mQ($size) {
+	@media (max-width: $size) {
+		@content;
+	}
+}
+// -------- Normalize ----------
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+ul {
+	margin: 0;
+}
+
+button,
+input[type='button'] {
+    cursor: pointer;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+    outline: none;
+}
+
+input, textarea {
+    border: none;
+}
+
+button {
+    border: none;
+    background: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+p {
+    margin: 0;
+}
+
+.align_item_center {
+	align-items: center;
+}
+
+a,
+a:hover,
+a:active,
+a:visited {
+	text-decoration: none;
+}
+// ------- Typo ------
+
+body {
+    font-family: "Poppins", arial, sans-serif;
+    font-weight: 300;
+    line-height: 1.625;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: $dark-color;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	 color: $dark-color;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 15px;
+}
+
+h6 {
+    font-size: 13px;
+}
+
+// ------- Styling ------
+.body_bg {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: -1;
+	background-color: $alt-bg-color;
+	clip-path: polygon(100% 100%, 0% 100%, 100% 0);
+}
+
+.conn {
+	padding: 20px 0;
+}
+
+// ----- header ----
+#header {
+	margin: 0px 0;
+	margin-left: 20px;
+	padding-bottom: 20px;
+	border-bottom: 5px solid $alt-bg-color;
+	
+	@include mQ($tablet) {
+		justify-content: center;
+	}
+
+	@include mQ($mobile) {
+		margin-left: 10px;
+		flex-direction: column;
+	}
+
+	// -- logo P --
+	.logo_p {
+		//background-color: $primary-color;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		img{
+			width: 65px;
+		}
+	}
+	// --- Heading Title --
+	.heading_title_p {
+		margin-left: 20px;
+
+		@include mQ($mobile) {
+			margin-left: 0;
+			margin-top: 20px;
+		}
+
+		h2 {
+			font-size: 22px;
+
+			@include mQ($mobile) {
+				text-align: center;
+			}
+		}
+	}
+}
+
+// --- Upload
+.inputUploadP {
+	margin: 5px 0px 0px 20px;
+
+	@include mQ($mobile) {
+		margin: 20px 10px;
+	}
+
+	.uploadForm {
+		display: flex;
+		align-items: center;
+
+		.uploadFile {
+			width: 0.1px;
+			height: 0.1px;
+			opacity: 0;
+			overflow: hidden;
+			position: absolute;
+			z-index: -1;
+		}
+
+		svg{
+			fill: $light-color;
+		}
+
+		.uploadFile + label {
+		    font-size: 1em;
+		    font-weight: 700;
+		    color: $light-color;
+		    background-color: $primary-color;
+		    display: inline-block;
+		    transition: .2s ease;
+		    padding: 8px 20px;
+		    border-radius: 3px;
+		    cursor: pointer;
+		}
+
+		.uploadFile:focus + label,
+		.uploadFile + label:hover {
+		    background-color: $dark-color;
+		}
+
+		.uploadFile:focus + label {
+			outline: 1px dotted $dark-color;
+			outline: -webkit-focus-ring-color auto 5px;
+		}
+
+		.uploadFile + label * {
+			pointer-events: none;
+		}
+
+		.js .uploadFile {
+		    width: 0.1px;
+		    height: 0.1px;
+		    opacity: 0;
+		    overflow: hidden;
+		    position: absolute;
+		    z-index: -1;
+		}
+
+		.no-js .uploadFile + label {
+		    display: none;
+		}
+
+		.uploadBtn_P {
+			margin-top: -7px;
+			margin-left: 10px;
+
+			.uploadBtn {
+				transition: .2s ease;
+
+				&:hover {
+					background-color: $secondary-color;
+					color: var(--dark-color);
+					border: 1px solid $dark-color;
+				}
+
+				i {
+					padding-right: 10px;
+				}
+			}
+		}
+
+	}
+}
+// ---- BackBtn P ---
+.backBtn_p {
+	margin: 10px 0px 0px 20px;
+
+	@include mQ($mobile) {
+		margin: 20px 10px;
+	}
+
+	a {
+		font-size: 1.3em;
+		display: flex;
+		align-items: center;
+		transition: .2s ease;
+		width: 150px;
+		color: $primary-color;
+
+		&:hover {
+			color: $dark-color;
+
+			i {
+				color: $dark-color;
+			}
+		}
+
+		i {
+			padding-right: 10px;
+			font-size: 1.5em;
+
+		}
+	}
+}
+
+// -- Table - P
+.table_p {
+	margin: 20px;
+	margin-top: 0;
+	width: calc(100% - 40px);
+
+	.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  		background-color: $tableHoverColor;
+	}
+
+	// th {
+	// 	@include mQ($mobile) {
+	// 		font-size: .9em;
+	// 	}
+	// }
+
+	td {
+		font-size: .95em;
+		vertical-align: middle;
+
+		&:nth-child(1) {
+			text-align: center;
+		}
+	}
+
+	.file_ic, .folder_ic {
+    	color: $primary-color;
+    	font-size: 1.5em;
+    	transition: .2s ease;
+
+    	&:hover {
+    		color: #0056b3;
+    	}
+  	}
+
+	@include mQ($mobile) {
+		margin: 20px 10px;
+		width: calc(100% - 20px); 
+	}
+}
+
+
+#tableData > tbody > tr > td {
+	padding: 0;
+	height: 20px;
+}
+
+.dataTables_filter input {
+	border: 1px solid $dark-color;
+	padding: 3px 20px;
+}
+
+// -- Footer --
+footer {
+	text-align: center;
+	font-size: .8em;
+	font-weight: bold;
+	margin: 30px 0;
+	margin-bottom: 0;
+}
