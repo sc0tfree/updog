@@ -38,7 +38,7 @@ def parse_arguments():
     args = parser.parse_args()
 
     # Normalize the path
-    args.directory = os.path.normpath(args.directory)
+    args.directory = os.path.abspath(args.directory)
 
     return args
 
