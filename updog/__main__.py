@@ -129,7 +129,7 @@ def main():
 
             path = request.form['path']
             # Prevent file upload to paths outside of base directory
-            if not is_valid_subpath(path, base_directory):
+            if not is_valid_subpath(path, base_directory) or path == '':
                 return redirect(request.referrer)
 
             for file in request.files.getlist('file'):
