@@ -30,21 +30,35 @@ def human_readable_file_size(size):
 
 def process_files(directory_files, base_directory):
     files = []
-    for file in directory_files:
-        if file.is_dir():
-            size = '--'
-            size_sort = -1
-        else:
-            size = human_readable_file_size(file.stat().st_size)
-            size_sort = file.stat().st_size
+    for file_entry in directory_files:
+
+        real_path = os.path.realpath(os.path.join(base_directory, file_entry.name))
+
+        # Default size
+        size = '--'
+        size_sort = -1
+
+        if os.path.isfile(real_path):
+            # Item is a file or a symlink points to a real file
+            size_sort = file_entry.stat().st_size
+            size = human_readable_file_size(size_sort)
+
+        last_modified = '???'
+        last_modified_sort = -1
+        if os.path.exists(real_path):
+            last_modified_sort = file_entry.stat().st_mtime
+            last_modified = ctime(last_modified_sort)
+
         files.append({
-            'name': file.name,
-            'is_dir': file.is_dir(),
-            'rel_path': get_relative_path(file.path, base_directory),
+            'name': file_entry.name,
+            'is_dir': file_entry.is_dir(),
+            'rel_path': get_relative_path(file_entry.path, base_directory),
             'size': size,
             'size_sort': size_sort,
-            'last_modified': ctime(file.stat().st_mtime),
-            'last_modified_sort': file.stat().st_mtime
+            'last_modified': last_modified,
+            'last_modified_sort': last_modified_sort,
+            'is_symlink': file_entry.is_symlink(),
+            'exists': os.path.exists(real_path)
         })
     return files
 
