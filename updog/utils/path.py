@@ -9,6 +9,13 @@ def is_valid_subpath(relative_directory, base_directory):
     return os.path.commonprefix([base_directory, in_question]) == base_directory
 
 
+def is_valid_upload_path(path, base_directory):
+    if path == '':
+        return False
+    in_question = os.path.abspath(path)
+    return os.path.commonprefix([base_directory, in_question]) == base_directory
+
+
 def get_relative_path(file_path, base_directory):
     return file_path.split(os.path.commonprefix([base_directory, file_path]))[1][1:]
 

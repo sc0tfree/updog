@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.serving import run_simple
 
-from updog.utils.path import is_valid_subpath, get_parent_directory, process_files
+from updog.utils.path import is_valid_subpath, is_valid_upload_path, get_parent_directory, process_files
 from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
 
@@ -129,7 +129,7 @@ def main():
 
             path = request.form['path']
             # Prevent file upload to paths outside of base directory
-            if not is_valid_subpath(path, base_directory) or path == '':
+            if not is_valid_upload_path(path, base_directory):
                 return redirect(request.referrer)
 
             for file in request.files.getlist('file'):
