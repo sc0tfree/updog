@@ -12,6 +12,37 @@ from updog.utils.path import is_valid_subpath, is_valid_upload_path, get_parent_
 from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
 
+def breadcrumb_items(base_directory, path):
+
+    base_parts = []
+    path_parts = []
+    current = '/'
+
+    if path:
+        items = [p for p in path.split('/') if p]
+        i = 0
+        for item in items:
+            i += 1
+            current += item + '/'
+            if i == len(items):
+                # Current directory
+                path_parts.append((item, None))
+            else:
+                # Parent directory of current
+                path_parts.append((item, current))
+
+    items = [p for p in base_directory.split('/') if p]
+    i = 0
+    for item in items:
+        i += 1
+        if i == len(items) and path_parts:
+            # Link to root directory
+            base_parts.append((item, '/'))
+        else:
+            # Unsharable item, parent of root directory
+            base_parts.append((item, None))
+
+    return base_parts + path_parts
 
 def read_write_directory(directory):
     if os.path.exists(directory):
@@ -21,7 +52,6 @@ def read_write_directory(directory):
             error('The output is not readable and/or writable')
     else:
         error('The specified directory does not exist')
-
 
 def parse_arguments():
     parser = argparse.ArgumentParser(prog='updog')
@@ -41,7 +71,6 @@ def parse_arguments():
     args.directory = os.path.abspath(args.directory)
 
     return args
-
 
 def main():
     args = parse_arguments()
@@ -110,8 +139,13 @@ def main():
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
-            return render_template('home.html', files=directory_files, back=back,
-                                   directory=requested_path, is_subdirectory=is_subdirectory, version=VERSION)
+            return render_template('home.html',
+                                    files=directory_files,
+                                    back=back,
+                                    directory=requested_path,
+                                    breadcrumb_path = breadcrumb_items(base_directory, path),
+                                    is_subdirectory=is_subdirectory,
+                                    version=VERSION)
         else:
             return redirect('/')
 
