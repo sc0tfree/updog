@@ -42,6 +42,38 @@ def parse_arguments():
 
     return args
 
+def breadcrumb_items(base_directory, path):
+
+    base_parts = []
+    path_parts = []
+    current = '/'
+
+    if path:
+        items = [p for p in path.split('/') if p]
+        i = 0
+        for item in items:
+            i += 1
+            current += item + '/'
+            if i == len(items):
+                # Current directory
+                path_parts.append((item, None))
+            else:
+                # Parent directory of current
+                path_parts.append((item, current))
+
+    items = [p for p in base_directory.split('/') if p]
+    i = 0
+    for item in items:
+        i += 1
+        if i == len(items) and path_parts:
+            # Link to root directory
+            base_parts.append((item, '/'))
+        else:
+            # Unsharable item, parent of root directory
+            base_parts.append((item, None))
+
+    return base_parts + path_parts
+
 
 def main():
     args = parse_arguments()
@@ -110,8 +142,13 @@ def main():
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
-            return render_template('home.html', files=directory_files, back=back,
-                                   directory=requested_path, is_subdirectory=is_subdirectory, version=VERSION)
+            return render_template('home.html',
+                                    files=directory_files,
+                                    back=back,
+                                    directory=requested_path,
+                                    breadcrumb_path = breadcrumb_items(base_directory, path),
+                                    is_subdirectory=is_subdirectory,
+                                    version=VERSION)
         else:
             return redirect('/')
 
