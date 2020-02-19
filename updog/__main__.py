@@ -12,36 +12,6 @@ from updog.utils.path import is_valid_subpath, is_valid_upload_path, get_parent_
 from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
 
-
-def read_write_directory(directory):
-    if os.path.exists(directory):
-        if os.access(directory, os.W_OK and os.R_OK):
-            return directory
-        else:
-            error('The output is not readable and/or writable')
-    else:
-        error('The specified directory does not exist')
-
-
-def parse_arguments():
-    parser = argparse.ArgumentParser(prog='updog')
-    cwd = os.getcwd()
-    parser.add_argument('-d', '--directory', metavar='DIRECTORY', type=read_write_directory, default=cwd,
-                        help='Root directory\n'
-                             '[Default=.]')
-    parser.add_argument('-p', '--port', type=int, default=9090,
-                        help='Port to serve [Default=9090]')
-    parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
-    parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
-    parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
-
-    args = parser.parse_args()
-
-    # Normalize the path
-    args.directory = os.path.abspath(args.directory)
-
-    return args
-
 def breadcrumb_items(base_directory, path):
 
     base_parts = []
@@ -74,6 +44,33 @@ def breadcrumb_items(base_directory, path):
 
     return base_parts + path_parts
 
+def read_write_directory(directory):
+    if os.path.exists(directory):
+        if os.access(directory, os.W_OK and os.R_OK):
+            return directory
+        else:
+            error('The output is not readable and/or writable')
+    else:
+        error('The specified directory does not exist')
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(prog='updog')
+    cwd = os.getcwd()
+    parser.add_argument('-d', '--directory', metavar='DIRECTORY', type=read_write_directory, default=cwd,
+                        help='Root directory\n'
+                             '[Default=.]')
+    parser.add_argument('-p', '--port', type=int, default=9090,
+                        help='Port to serve [Default=9090]')
+    parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
+    parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
+    parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+
+    args = parser.parse_args()
+
+    # Normalize the path
+    args.directory = os.path.abspath(args.directory)
+
+    return args
 
 def main():
     args = parse_arguments()
