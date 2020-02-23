@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  updog:
+    container_name: updog
+    build: .
+    volumes:
+      - "./serve:/serve"
+    ports:
+      - "9090:9090"
