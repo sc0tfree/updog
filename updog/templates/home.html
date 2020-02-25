@@ -75,14 +75,20 @@
             {% for file in files %}
             <tr>
                 <td> <!-- Icon -->
-                    {% if file.is_dir %}
+                    {% if not file.exists %}
+                    <button class="file_ic"><i class="far"></i></button><!-- Dead Symlink -->
+                    {% elif file.is_dir %}
                     <button class="file_ic"><i class="far fa-folder"></i></button><!-- Directory icon -->
                     {% else %}
                     <button class="file_ic"><i class="far fa-file"></i></button><!-- File icon -->
                     {% endif %}
                 </td>
                 <td> <!-- Name -->
+                    {% if file.exists %}
                     <a href="/{{ file.rel_path }}">{{ file.name }}{% if file.is_dir %}/{% endif %}</a>
+                    {% else %}
+                    {{ file.name }}{% if file.is_dir %}/{% endif %}
+                    {% endif %}
                 </td>
                 <td data-order="{{ file.size_sort }}"> <!-- File size -->
                     {{ file.size }}
@@ -91,7 +97,9 @@
                     {{ file.last_modified }}
                 </td>
                 <td> <!-- View file -->
-                    {% if not file.is_dir %}
+                    {% if file.is_symlink and not file.exists %}
+                    Dead Symbolic Link
+                    {% elif not file.is_dir %}
                     <a href="/{{ file.rel_path }}?view">View in browser</a>
                     {% endif %}
                 </td>

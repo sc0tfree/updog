@@ -28,23 +28,42 @@ def human_readable_file_size(size):
     return '{:.4g} {}'.format(size / (1 << (order * 10)), _suffixes[order])
 
 
-def process_files(directory_files, base_directory):
+def process_files(directory_files, base_directory, requested_path):
     files = []
-    for file in directory_files:
-        if file.is_dir():
-            size = '--'
-            size_sort = -1
-        else:
-            size = human_readable_file_size(file.stat().st_size)
-            size_sort = file.stat().st_size
+
+    for file_entry in directory_files:
+
+        path = os.path.join(requested_path, file_entry.name)
+
+        # Default values for display/sort fields
+
+        # Size
+        size = '--'
+        size_sort = -1
+
+        # Last-Modified date
+        last_modified = '???'
+        last_modified_sort = -1
+
+        if os.path.exists(path):
+            last_modified_sort = file_entry.stat().st_mtime
+            last_modified = ctime(last_modified_sort)
+
+            if os.path.isfile(path):
+                # Existing item is a file or a symlink points to a real file
+                size_sort = file_entry.stat().st_size
+                size = human_readable_file_size(size_sort)
+
         files.append({
-            'name': file.name,
-            'is_dir': file.is_dir(),
-            'rel_path': get_relative_path(file.path, base_directory),
+            'name': file_entry.name,
+            'is_dir': os.path.isdir(path),
+            'rel_path': get_relative_path(file_entry.path, base_directory),
             'size': size,
             'size_sort': size_sort,
-            'last_modified': ctime(file.stat().st_mtime),
-            'last_modified_sort': file.stat().st_mtime
+            'last_modified': last_modified,
+            'last_modified_sort': last_modified_sort,
+            'is_symlink': file_entry.is_symlink(),
+            'exists': os.path.exists(path)
         })
     return files
 
