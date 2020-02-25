@@ -106,7 +106,7 @@ def main():
         if os.path.exists(requested_path):
             # Read the files
             try:
-                directory_files = process_files(os.scandir(requested_path), base_directory)
+                directory_files = process_files(os.scandir(requested_path), base_directory, requested_path)
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
