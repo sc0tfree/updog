@@ -28,6 +28,7 @@
         </div>
     </header>
 
+    {% if allow_upload %}
     <!-- ----- Upload Form ----- -->
     <div class="inputUploadP">
         <form method="post" action="/upload" enctype="multipart/form-data" class="uploadForm">
@@ -49,6 +50,7 @@
             </p>
         </form>
     </div>
+    {% endif %}
 
     {% if is_subdirectory %}
     <section class="backBtn_p">
