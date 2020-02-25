@@ -15,11 +15,6 @@ def is_valid_upload_path(path, base_directory):
     in_question = os.path.abspath(path)
     return os.path.commonprefix([base_directory, in_question]) == base_directory
 
-
-def get_relative_path(file_path, base_directory):
-    return file_path.split(os.path.commonprefix([base_directory, file_path]))[1][1:]
-
-
 def human_readable_file_size(size):
     # Taken from Dipen Panchasara
     # https://stackoverflow.com/questions/1094841/reusable-library-to-get-human-readable-version-of-file-size
@@ -40,7 +35,7 @@ def process_files(directory_files, base_directory):
         files.append({
             'name': file.name,
             'is_dir': file.is_dir(),
-            'rel_path': get_relative_path(file.path, base_directory),
+            'rel_path': os.path.relpath(file.path, base_directory),
             'size': size,
             'size_sort': size_sort,
             'last_modified': ctime(file.stat().st_mtime),
@@ -50,7 +45,7 @@ def process_files(directory_files, base_directory):
 
 
 def get_parent_directory(path, base_directory):
-    difference = get_relative_path(path, base_directory)
+    difference = os.path.relpath(path, base_directory)
     difference_fields = difference.split('/')
     if len(difference_fields) == 1:
         return ''
