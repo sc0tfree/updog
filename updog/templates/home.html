@@ -59,6 +59,7 @@
     </section>
     {% endif %}
 
+    {% if allow_listing %}
     <!-- Table -->
     <section class="table_p table-responsive">
         <table id="tableData" class="table table-hover compact">
@@ -82,7 +83,11 @@
                     {% endif %}
                 </td>
                 <td> <!-- Name -->
+                    {% if file.is_dir or allow_download %}
                     <a href="/{{ file.rel_path }}">{{ file.name }}{% if file.is_dir %}/{% endif %}</a>
+                    {% else %}
+                    {{ file.name }}
+                    {% endif %}
                 </td>
                 <td data-order="{{ file.size_sort }}"> <!-- File size -->
                     {{ file.size }}
@@ -100,6 +105,7 @@
             </tbody>
         </table>
     </section>
+    {% endif %}
 
     <footer>
         <p>
