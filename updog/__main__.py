@@ -13,7 +13,7 @@ from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
 
 
-def read_write_directory(directory):
+def check_read_write_directory(directory):
     if os.path.exists(directory):
         if os.access(directory, os.W_OK and os.R_OK):
             return directory
@@ -22,11 +22,10 @@ def read_write_directory(directory):
     else:
         error('The specified directory does not exist')
 
-
 def parse_arguments():
     parser = argparse.ArgumentParser(prog='updog')
     cwd = os.getcwd()
-    parser.add_argument('-d', '--directory', metavar='DIRECTORY', type=read_write_directory, default=cwd,
+    parser.add_argument('-d', '--directory', metavar='DIRECTORY', type=check_read_write_directory, default=cwd,
                         help='Root directory\n'
                              '[Default=.]')
     parser.add_argument('-p', '--port', type=int, default=9090,
@@ -34,6 +33,11 @@ def parse_arguments():
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+
+    # Content control flags
+    parser.add_argument('--no-download', action='store_true', help='Disable file download.')
+    parser.add_argument('--no-listing', action='store_true', help='Disable file listing.')
+    parser.add_argument('--no-upload', action='store_true', help='Disable file upload.')
 
     args = parser.parse_args()
 
@@ -79,6 +83,9 @@ def main():
             # If file
             elif os.path.isfile(requested_path):
 
+                if args.no_download:
+                    abort(403, 'Read Permission Denied: ' + requested_path)
+
                 # Check if the view flag is set
                 if request.args.get('view') is None:
                     send_as_attachment = True
@@ -103,15 +110,32 @@ def main():
             requested_path = base_directory
             back = ''
 
+        if args.no_listing and requested_path != base_directory:
+            return redirect('/')
+
         if os.path.exists(requested_path):
             # Read the files
-            try:
-                directory_files = process_files(os.scandir(requested_path), base_directory)
-            except PermissionError:
-                abort(403, 'Read Permission Denied: ' + requested_path)
 
-            return render_template('home.html', files=directory_files, back=back,
-                                   directory=requested_path, is_subdirectory=is_subdirectory, version=VERSION)
+            if args.no_listing:
+                directory_files = []
+            else:
+                try:
+                    directory_files = process_files(os.scandir(requested_path), base_directory)
+                except PermissionError:
+                    abort(403, 'Read Permission Denied: ' + requested_path)
+
+
+            return render_template(
+                'home.html',
+                files=directory_files,
+                allow_download = not args.no_download,
+                allow_listing = not args.no_listing,
+                allow_upload = not args.no_upload,
+                back=back,
+                directory=requested_path,
+                is_subdirectory=is_subdirectory,
+                version=VERSION
+            )
         else:
             return redirect('/')
 
@@ -122,6 +146,9 @@ def main():
     @auth.login_required
     def upload():
         if request.method == 'POST':
+
+            if args.no_upload:
+                abort(405, 'Uploads are not allowed.')
 
             # No file part - needs to check before accessing the files['file']
             if 'file' not in request.files:
