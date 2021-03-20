@@ -32,7 +32,9 @@ def parse_arguments():
     parser.add_argument('-p', '--port', type=int, default=9090,
                         help='Port to serve [Default=9090]')
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
-    parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
+    parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection (temporary SSL/TLS certificate)')
+    parser.add_argument('--sslcert', type=str, help='Use an encrypted connection (existing SSL/TLS certificate)')
+    parser.add_argument('--sslkey', type=str, help='Use an encrypted connection (existing SSL/TLS certificate key)')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
 
     args = parser.parse_args()
@@ -176,6 +178,8 @@ def main():
     ssl_context = None
     if args.ssl:
         ssl_context = 'adhoc'
+    elif args.sslcert and args.sslkey:
+        ssl_context = (args.sslcert, args.sslkey)
 
     run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
 
