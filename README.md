@@ -9,7 +9,7 @@
 
 Updog is a replacement for Python's `SimpleHTTPServer`. 
 It allows uploading and downloading via HTTP/S, 
-can set ad hoc SSL certificates and use HTTP basic auth.
+can set ad hoc or existing SSL certificates and use HTTP basic auth.
 
 <p align="center">
   <img src="https://sc0tfree.squarespace.com/s/updog-screenshot.png" alt="Updog screenshot"/>
@@ -31,6 +31,8 @@ Install using pip:
 | -p PORT, --port PORT                | Port to serve [Default=9090]                     |
 | --password PASSWORD                 | Use a password to access the page. (No username) |
 | --ssl                               | Enable transport encryption via SSL              |
+| --sslcert                           | Path to existing SSL certificate                 |
+| --sslkey                            | Path to existing SSL key (Passwords supported)   |
 | --version                           | Show version                                     |
 | -h, --help                          | Show help                                        |
 
@@ -59,6 +61,10 @@ enter the password in the password field.
 **Use an SSL connection:**
 
 `updog --ssl`
+
+Use a specific SSL certificate and SSL key (password protected keys supported):
+
+`updog --sslcert /path/to/certificate --sslkey /path/to/certificate_key`
 
 ## Thanks
 
