@@ -54,8 +54,6 @@ def parse_arguments():
     return args
 
 
-
-
 def main():
     args = parse_arguments()
 
@@ -193,9 +191,8 @@ def main():
 
     QR_link = f"http://{get_interface_ip(socket.AF_INET)}:{args.port}/"
     QR_encoding = pyqrcode.create(QR_link)
-    print(QR_encoding.terminal(quiet_zone=1))
+    print(QR_encoding.terminal(quiet_zone=0))
     run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
-
 
 
 if __name__ == '__main__':
