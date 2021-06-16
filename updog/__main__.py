@@ -1,6 +1,8 @@
 import os
 import signal
 import argparse
+import socket
+
 
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
 from flask_httpauth import HTTPBasicAuth
@@ -11,6 +13,12 @@ from werkzeug.serving import run_simple
 from updog.utils.path import is_valid_subpath, is_valid_upload_path, get_parent_directory, process_files
 from updog.utils.output import error, info, warn, success
 from updog import version as VERSION
+
+# added to print QRcode for given address from get_interface_ip
+import socket
+import pyqrcode
+from werkzeug.serving import get_interface_ip
+from pyqrcode import QRCode
 
 
 def read_write_directory(directory):
@@ -31,9 +39,12 @@ def parse_arguments():
                              '[Default=.]')
     parser.add_argument('-p', '--port', type=int, default=9090,
                         help='Port to serve [Default=9090]')
-    parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
-    parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
-    parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+    parser.add_argument('--password', type=str, default='',
+                        help='Use a password to access the page. (No username)')
+    parser.add_argument('--ssl', action='store_true',
+                        help='Use an encrypted connection')
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s v'+VERSION)
 
     args = parser.parse_args()
 
@@ -106,7 +117,8 @@ def main():
         if os.path.exists(requested_path):
             # Read the files
             try:
-                directory_files = process_files(os.scandir(requested_path), base_directory)
+                directory_files = process_files(
+                    os.scandir(requested_path), base_directory)
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
@@ -177,6 +189,9 @@ def main():
     if args.ssl:
         ssl_context = 'adhoc'
 
+    QR_link = f"http://{get_interface_ip(socket.AF_INET)}:{args.port}/"
+    QR_encoding = pyqrcode.create(QR_link)
+    print(QR_encoding.terminal(quiet_zone=0))
     run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
 
 
