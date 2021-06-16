@@ -1,6 +1,7 @@
 import os
 import signal
 import argparse
+import socket
 
 
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
@@ -51,6 +52,19 @@ def parse_arguments():
     args.directory = os.path.abspath(args.directory)
 
     return args
+
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 
 def main():
@@ -178,6 +192,7 @@ def main():
 
     # Inform user before server goes up
     success('Serving {}...'.format(args.directory, args.port))
+    info(f'{get_ip()}:{args.port}')
 
     def handler(signal, frame):
         print()
@@ -187,10 +202,12 @@ def main():
     ssl_context = None
     if args.ssl:
         ssl_context = 'adhoc'
+
     QR_link = f"http://{get_interface_ip(socket.AF_INET)}:{args.port}/"
     QR_encoding = pyqrcode.create(QR_link)
     print(QR_encoding.terminal(quiet_zone=1))
     run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
+
 
 
 if __name__ == '__main__':
