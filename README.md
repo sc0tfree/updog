@@ -1,8 +1,8 @@
-![Version 1.4](http://img.shields.io/badge/version-v1.4-green.svg)
-![Python 3.8](http://img.shields.io/badge/python-3.8-blue.svg)
-[![MIT License](http://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/sc0tfree/updog/blob/master/LICENSE)
-![image](https://user-images.githubusercontent.com/21632768/124584897-073da900-de55-11eb-9b0f-9a23387c282a.png)
-
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/sc0tfree/updog?color=success&style=flat-square)
+![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/crstian19/updog?color=blue&logoColor=blue&style=flat-square)
+![Docker Pulls](https://img.shields.io/docker/pulls/crstian/updog?logo=Docker&style=flat-square)
+![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/crstian/updog?logo=Docker&style=flat-square)
 <p>
   <img src="https://sc0tfree.squarespace.com/s/updog.png" width=85px alt="updog"/>
 </p>
