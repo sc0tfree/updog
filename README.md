@@ -1,7 +1,7 @@
 ![Version 1.4](http://img.shields.io/badge/version-v1.4-green.svg)
 ![Python 3.8](http://img.shields.io/badge/python-3.8-blue.svg)
 [![MIT License](http://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/sc0tfree/updog/blob/master/LICENSE)
-[![sc0tfree Twitter](http://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/sc0tfree)
+![image](https://user-images.githubusercontent.com/21632768/124584897-073da900-de55-11eb-9b0f-9a23387c282a.png)
 
 <p>
   <img src="https://sc0tfree.squarespace.com/s/updog.png" width=85px alt="updog"/>
