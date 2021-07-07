@@ -1,0 +1,9 @@
+version: '3'
+services:
+  updong:
+     build: .
+     volumes:
+      - '/YOUR/PATH:/uploads'
+     ports:
+      - 9090:9090
+     restart: unless-stopped
