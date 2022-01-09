@@ -14,7 +14,7 @@ setup(
     # GitHub releases in format "updog-X.Y"
     download_url = 'https://github.com/sc0tfree/updog/archive/updog-' + updog.version + '.tar.gz',
     license='MIT',
-    author='sc0tfree',
+    author='trhacknon',
     author_email='henry@sc0tfree.com',
     description='Updog is a replacement for Python\'s SimpleHTTPServer. '
                 'It allows uploading and downloading via HTTP/S, can set '
