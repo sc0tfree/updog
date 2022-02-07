@@ -93,7 +93,12 @@ def main():
                     mimetype = None
 
                 try:
-                    return send_file(requested_path, mimetype=mimetype, as_attachment=send_as_attachment)
+                    if extension in ('.mp4', '.avi', '.mkv'):
+                        # if video file is found, then use conditional flag, to enable video jumping
+                        # you can slide to any part of the  video and then play
+                        return send_file(requested_path, mimetype=mimetype, as_attachment=send_as_attachment, conditional=True)
+                    else:
+                        return send_file(requested_path, mimetype=mimetype, as_attachment=send_as_attachment)
                 except PermissionError:
                     abort(403, 'Read Permission Denied: ' + requested_path)
 
@@ -177,7 +182,7 @@ def main():
     if args.ssl:
         ssl_context = 'adhoc'
 
-    run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
+    run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context, threaded=True)
 
 
 if __name__ == '__main__':
