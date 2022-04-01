@@ -1,6 +1,8 @@
 import os
 import signal
 import argparse
+import secrets
+import string
 
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
 from flask_httpauth import HTTPBasicAuth
@@ -31,7 +33,8 @@ def parse_arguments():
                              '[Default=.]')
     parser.add_argument('-p', '--port', type=int, default=9090,
                         help='Port to serve [Default=9090]')
-    parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
+    parser.add_argument('--password', type=str, default='', action='store', nargs='?',
+                        help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
 
@@ -150,6 +153,11 @@ def main():
                         abort(403, 'Write Permission Denied: ' + full_path)
 
             return redirect(request.referrer)
+
+    # If --password argument is supplied without a value, generate and print a random one.
+    if args.password is None:
+        args.password = ''.join((secrets.choice(string.ascii_letters+string.digits) for _ in range(10)))
+        success('Random password: {}'.format(args.password))
 
     # Password functionality is without username
     users = {
