@@ -29,6 +29,8 @@ def parse_arguments():
     parser.add_argument('-d', '--directory', metavar='DIRECTORY', type=read_write_directory, default=cwd,
                         help='Root directory\n'
                              '[Default=.]')
+    parser.add_argument('-b', '--bind', metavar='ADDRESS', type=str, default='0.0.0.0',
+                        help='Specify alternate bind address [Default=0.0.0.0]')
     parser.add_argument('-p', '--port', type=int, default=9090,
                         help='Port to serve [Default=9090]')
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
@@ -166,7 +168,7 @@ def main():
             return True
 
     # Inform user before server goes up
-    success('Serving {}...'.format(args.directory, args.port))
+    success('Serving {} from {}:{}...'.format(args.directory, args.bind, args.port))
 
     def handler(signal, frame):
         print()
@@ -177,7 +179,7 @@ def main():
     if args.ssl:
         ssl_context = 'adhoc'
 
-    run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
+    run_simple(args.bind, int(args.port), app, ssl_context=ssl_context)
 
 
 if __name__ == '__main__':

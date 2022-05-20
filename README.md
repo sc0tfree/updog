@@ -23,16 +23,17 @@ Install using pip:
 
 ## Usage
 
-`updog [-d DIRECTORY] [-p PORT] [--password PASSWORD] [--ssl]`
+`updog [-d DIRECTORY] [-b ADDRESS] [-p PORT] [--password PASSWORD] [--ssl]`
 
-| Argument                            | Description                                      |
-|-------------------------------------|--------------------------------------------------| 
-| -d DIRECTORY, --directory DIRECTORY | Root directory [Default=.]                       | 
-| -p PORT, --port PORT                | Port to serve [Default=9090]                     |
-| --password PASSWORD                 | Use a password to access the page. (No username) |
-| --ssl                               | Enable transport encryption via SSL              |
-| --version                           | Show version                                     |
-| -h, --help                          | Show help                                        |
+| Argument                            | Description                                             |
+|-------------------------------------|---------------------------------------------------------|
+| -d DIRECTORY, --directory DIRECTORY | Root directory [Default=.]                              |
+| -b ADDRESS, --bind ADDRESS          | Specify alternate bind address [Default=0.0.0.0]        |
+| -p PORT, --port PORT                | Port to serve [Default=9090]                            |
+| --password PASSWORD                 | Use a password to access the page. (No username)        |
+| --ssl                               | Enable transport encryption via SSL                     |
+| --version                           | Show version                                            |
+| -h, --help                          | Show help                                               |
 
 ## Examples
 
@@ -47,6 +48,10 @@ Install using pip:
 **Serve from port 1234:**
 
 `updog -p 1234`
+
+**Serve from 192.168.1.11 IP address and port 1234:**
+
+`updog -b 192.168.1.11 -p 1234`
 
 **Password protect the page:**
 
