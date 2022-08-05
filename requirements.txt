@@ -1,5 +1,5 @@
 colorama
 flask
 flask_httpauth
-werkzeug
+werkzeug == 1.01
 pyopenssl
