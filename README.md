@@ -1,8 +1,3 @@
-![Version 1.4](http://img.shields.io/badge/version-v1.4-green.svg)
-![Python 3.8](http://img.shields.io/badge/python-3.8-blue.svg)
-[![MIT License](http://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/sc0tfree/updog/blob/master/LICENSE)
-[![sc0tfree Twitter](http://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/sc0tfree)
-
 <p>
   <img src="https://sc0tfree.squarespace.com/s/updog.png" width=85px alt="updog"/>
 </p>
@@ -11,15 +6,11 @@ Updog is a replacement for Python's `SimpleHTTPServer`.
 It allows uploading and downloading via HTTP/S, 
 can set ad hoc SSL certificates and use HTTP basic auth.
 
-<p align="center">
-  <img src="https://sc0tfree.squarespace.com/s/updog-screenshot.png" alt="Updog screenshot"/>
-</p>
-
 ## Installation
 
-Install using pip:
+Install using pipx:
 
-`pip3 install updog`
+`pipx install git+https://github.com/KFDCompiled/updog`
 
 ## Usage
 
@@ -59,6 +50,13 @@ enter the password in the password field.
 **Use an SSL connection:**
 
 `updog --ssl`
+
+**Upload using curl:**
+`curl -v -XPOST -F "file=@PATH/NAME;filename=NAME" -F "path=/FULL/PATH/TO/UPDOG/WORKINGDIR" http://IP:PORT/upload`
+
+if you started updog with `updog -p 80 -d ${PREFIX}/www` then `curl -v -XPOST -F "file=@Public/foo;filename=foo" -F "path=${PREFIX}/www" http://192.168.122.59:80/upload`
+
+
 
 ## Thanks
 
