@@ -54,7 +54,7 @@ enter the password in the password field.
 **Upload using curl:**
 `curl -v -XPOST -F "file=@PATH/NAME;filename=NAME" -F "path=/FULL/PATH/TO/UPDOG/WORKINGDIR" http://IP:PORT/upload`
 
-if you started updog with `updog -p 80 -d ${PREFIX}/www` then `curl -v -XPOST -F "file=@Public/foo;filename=foo" -F "path=${PREFIX}/www" http://192.168.122.59:80/upload`
+if you started updog with `updog -p 80 -d ${PREFIX}/www` then `curl -v -XPOST -F "file=@Public/foo;filename=foo" -F "path=${PREFIX}/www" http://IP:80/upload`
 
 
 
