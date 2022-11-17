@@ -1,5 +1,6 @@
 colorama
 flask
 flask_httpauth
+flask_cors
 werkzeug
 pyopenssl
