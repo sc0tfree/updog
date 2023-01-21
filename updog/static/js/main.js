@@ -30,7 +30,7 @@ Array.prototype.forEach.call( inputs, function( input )
 		}
 
 		if( fileName )
-			label.querySelector( 'span' ).innerHTML = fileName;
+			label.querySelector( 'span' ).innerText = fileName;
 		else
 			label.innerHTML = labelVal;
 	});
