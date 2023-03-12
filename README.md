@@ -60,6 +60,10 @@ enter the password in the password field.
 
 `updog --ssl`
 
+## What's updog?
+
+Not much, how about you?
+
 ## Thanks
 
 A special thank you to [Nicholas Smith](http://nixmith.com) for
