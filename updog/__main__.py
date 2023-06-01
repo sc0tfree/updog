@@ -4,6 +4,7 @@ import argparse
 
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
 from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.serving import run_simple
@@ -34,6 +35,7 @@ def parse_arguments():
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+    parser.add_argument('--cors', action='store_true', help='Enable CORS')
 
     args = parser.parse_args()
 
@@ -48,6 +50,9 @@ def main():
 
     app = Flask(__name__)
     auth = HTTPBasicAuth()
+
+    if args.cors:
+        CORS(app)
 
     global base_directory
     base_directory = args.directory
