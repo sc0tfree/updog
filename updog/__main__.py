@@ -4,6 +4,7 @@ import argparse
 
 from flask import Flask, render_template, send_file, redirect, request, send_from_directory, url_for, abort
 from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.serving import run_simple
@@ -34,6 +35,7 @@ def parse_arguments():
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
+    parser.add_argument('--cors', action='store_true', help='Enable CORS')
 
     args = parser.parse_args()
 
@@ -48,6 +50,9 @@ def main():
 
     app = Flask(__name__)
     auth = HTTPBasicAuth()
+
+    if args.cors:
+        CORS(app)
 
     global base_directory
     base_directory = args.directory
@@ -110,6 +115,8 @@ def main():
             except PermissionError:
                 abort(403, 'Read Permission Denied: ' + requested_path)
 
+            # remove the base_directory
+            requested_path = requested_path[len(base_directory):]
             return render_template('home.html', files=directory_files, back=back,
                                    directory=requested_path, is_subdirectory=is_subdirectory, version=VERSION)
         else:
@@ -121,22 +128,24 @@ def main():
     @app.route('/upload', methods=['POST'])
     @auth.login_required
     def upload():
+        global base_directory
+
         if request.method == 'POST':
 
             # No file part - needs to check before accessing the files['file']
             if 'file' not in request.files:
-                return redirect(request.referrer)
+                return redirect(request.headers.get('Referer', '/'))
 
-            path = request.form['path']
+            path = base_directory + request.form.get('path', '/')
             # Prevent file upload to paths outside of base directory
             if not is_valid_upload_path(path, base_directory):
-                return redirect(request.referrer)
+                return redirect(request.headers.get('Referer', '/'))
 
             for file in request.files.getlist('file'):
 
                 # No filename attached
                 if file.filename == '':
-                    return redirect(request.referrer)
+                    return redirect(request.headers.get('Referer', '/'))
 
                 # Assuming all is good, process and save out the file
                 # TODO:
@@ -149,7 +158,7 @@ def main():
                     except PermissionError:
                         abort(403, 'Write Permission Denied: ' + full_path)
 
-            return redirect(request.referrer)
+            return redirect(request.headers.get('Referer', '/'))
 
     # Password functionality is without username
     users = {
