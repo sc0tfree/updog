@@ -4,16 +4,18 @@
 [![sc0tfree Twitter](http://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow)](https://twitter.com/sc0tfree)
 
 <p>
-  <img src="https://sc0tfree.squarespace.com/s/updog.png" width=85px alt="updog"/>
+  <img src="https://github.com/sc0tfree/updog/assets/24238512/0142c90f-4277-47a2-9570-fddbc3eeecfa" width=85px alt="updog"/>
 </p>
+
 
 Updog is a replacement for Python's `SimpleHTTPServer`. 
 It allows uploading and downloading via HTTP/S, 
 can set ad hoc SSL certificates and use HTTP basic auth.
 
 <p align="center">
-  <img src="https://sc0tfree.squarespace.com/s/updog-screenshot.png" alt="Updog screenshot"/>
+  <img src="https://github.com/sc0tfree/updog/assets/24238512/d2ee71ce-afea-4b03-962d-67cec39afb78" alt="Updog screenshot"/>
 </p>
+
 
 ## Installation
 
