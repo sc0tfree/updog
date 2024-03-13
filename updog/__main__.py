@@ -33,6 +33,8 @@ def parse_arguments():
                         help='Port to serve [Default=9090]')
     parser.add_argument('--password', type=str, default='', help='Use a password to access the page. (No username)')
     parser.add_argument('--ssl', action='store_true', help='Use an encrypted connection')
+    parser.add_argument('-k', '--key', type=str, default=None, help='Use ssl with your own private key')
+    parser.add_argument('-c', '--cert', type=str, default=None, help='Use ssl with your own certificate')
     parser.add_argument('--version', action='version', version='%(prog)s v'+VERSION)
 
     args = parser.parse_args()
@@ -175,7 +177,12 @@ def main():
 
     ssl_context = None
     if args.ssl:
-        ssl_context = 'adhoc'
+        if args.cert and args.key:
+            ssl_context = (args.cert, args.key)
+        if (args.cert and not args.key) or (args.key and not args.cert):
+            error('The private key or certificate is missing')
+        else:
+            ssl_context = 'adhoc'
 
     run_simple("0.0.0.0", int(args.port), app, ssl_context=ssl_context)
 
