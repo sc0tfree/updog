@@ -179,7 +179,7 @@ def main():
     if args.ssl:
         if args.cert and args.key:
             ssl_context = (args.cert, args.key)
-        if (args.cert and not args.key) or (args.key and not args.cert):
+        elif (args.cert and not args.key) or (args.key and not args.cert):
             error('The private key or certificate is missing')
         else:
             ssl_context = 'adhoc'
